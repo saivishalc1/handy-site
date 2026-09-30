@@ -1,0 +1,102 @@
+/* Self-hosted fonts: no third-party round trips before text can render */
+@import '@fontsource-variable/inter';
+@import '@fontsource/cormorant-garamond/400.css';
+@import '@fontsource/cormorant-garamond/400-italic.css';
+@import '@fontsource/cormorant-garamond/500.css';
+@import 'tailwindcss';
+@import 'lenis/dist/lenis.css';
+
+/* "Private Office": near-black, warm bone text, champagne gold taken from the Luigi logo.
+   Light chapters use warm paper with a deeper bronze so the accent keeps its contrast. */
+@theme {
+  --color-ink: #0d0c0a;
+  --color-surface: #151310;
+  --color-surface-2: #1d1a16;
+  --color-bone: #efe8dc;
+  --color-stone: #a39a8b;
+  --color-line: rgb(239 232 220 / 0.14);
+  --color-gold: #d2b07a;
+  --color-gold-hover: #e2c490;
+
+  --color-paper: #f3ede3;
+  --color-paper-2: #ebe3d6;
+  --color-ink-soft: #3a352e;
+  --color-stone-dark: #6f685d;
+  --color-line-dark: rgb(26 23 19 / 0.14);
+  --color-bronze: #8e6a38;
+
+  --font-display: 'Cormorant Garamond', ui-serif, Georgia, serif;
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html {
+  background: var(--color-ink);
+  color: var(--color-bone);
+  scroll-padding-top: 88px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-sans);
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--color-gold);
+  color: var(--color-ink);
+}
+
+/* Cormorant's default numerals are old-style; figures in prices and stats must line up */
+.font-display {
+  font-variant-numeric: lining-nums proportional-nums;
+}
+
+@utility eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+@utility container-page {
+  width: 100%;
+  max-width: 1320px;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+  @media (width >= 48rem) {
+    padding-inline: 2.5rem;
+  }
+  @media (width >= 80rem) {
+    padding-inline: 4rem;
+  }
+}
+
+/* Static grain: a tiny tile at low opacity (no blend modes on fixed layers, they cost fps) */
+.grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
